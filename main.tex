@@ -1,0 +1,98 @@
+\documentclass[preprint,aps,prd,nofootinbib,superscriptaddress,eqsecnum,tightenlines,floatfix]{revtex4-2}
+%\documentclass[prd,superscriptaddress,amsfonts,amssymb,amsmath,showpacs,onecolumn,11 pt]{revtex4-2}
+% --- Core packages (keep minimal for REVTeX compatibility) ---
+\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+%\usepackage{amsfonts}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage[caption=false]{subfig} % for subfigures compatible with REVTeX
+\usepackage{amsmath,amssymb}
+\usepackage{mathtools}
+\usepackage{bm}
+
+% hyperref should be loaded late; zref-clever can follow it.
+\usepackage{hyperref}
+\usepackage{orcidlink}
+\usepackage{zref-clever}
+\usepackage{here}
+
+% ---------- zref-clever setup (APS-like c) ----------
+\zcsetup{lang=english,cap=true,abbrev=true,nameinlink=tsingle}
+\zcLanguageSetup{english}{
+  namesep   = {\nobreak},
+  rangesep  = {\textendash},
+}
+\zcRefTypeSetup{section}{
+  Name-sg=Section,  Name-pl=Sections,
+  Name-sg-ab=Sec.~,  Name-pl-ab=Secs.~,
+}
+\zcRefTypeSetup{figure}{
+  Name-sg=Figure,   Name-pl=Figures,
+  Name-sg-ab=Fig.~,  Name-pl-ab=Figs.~,
+}
+\zcRefTypeSetup{table}{
+  Name-sg=Table,    Name-pl=Tables,
+  Name-sg-ab=Table~, Name-pl-ab=Tables~,
+}
+\zcRefTypeSetup{equation}{
+  Name-sg=Equation, Name-pl=Equations,
+  Name-sg-ab=Eq.,   Name-pl-ab=Eqs.,
+  refbounds={,(,),}
+}
+
+% ---------- Convenience macros ----------
+\newcommand{\non}{\nonumber}
+
+% Paired delimiters
+\DeclarePairedDelimiter{\parens}{(}{)}
+\DeclarePairedDelimiter{\bracks}{[}{]}
+\DeclarePairedDelimiter{\braces}{\{}{\}}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% Derivatives
+\newcommand{\del}{\partial}
+\newcommand{\pd}[2]{\frac{\del #1}{\del #2}}
+\newcommand{\pdd}[3]{\frac{\del^2 #1}{\del #2\,\del #3}}
+\newcommand{\dv}[2]{\frac{d #1}{d #2}}
+
+% Vectors
+\newcommand{\vect}[1]{\bm{#1}}
+
+% ORCID on title page (forced via \thanks)
+\newcommand{\ORCID}[1]{%
+  {\,\orcidlink{#1}}%
+}
+
+% Energy condition status macros
+\newcommand{\OK}{\text{Satisfied}}
+\newcommand{\NO}{\text{Violated}}
+
+
+\begin{document}
+
+\title{test}
+
+\author{Your Name\ORCID{0000-0000-0000-0000}}
+\email{email-address}
+\affiliation{Faculty of Symbiotic Systems Science, Fukushima University, Fukushima 960-1296, Japan.}
+
+\begin{abstract}
+test
+\end{abstract}
+% \date{\today}
+\maketitle
+\newpage
+%======================================================================
+\section{Introduction}
+%======================================================================
+test
+\begin{acknowledgments}
+test
+\end{acknowledgments}
+
+\bibliographystyle{apsrev4-2}
+\bibliography{refs}
+
+\end{document}
