@@ -72,14 +72,14 @@
 
 \begin{document}
 
-\title{test}
+\title{REV\TeX\ 4.2 Minimal Example with zref-clever}
 
 \author{Your Name\ORCID{0000-0000-0000-0000}}
 \email{email-address}
 \affiliation{Faculty of Symbiotic Systems Science, Fukushima University, Fukushima 960-1296, Japan.}
 
 \begin{abstract}
-test
+Minimal REV\TeX\ example compiled with BibTeX.
 \end{abstract}
 % \date{\today}
 \maketitle
@@ -87,7 +87,31 @@ test
 %======================================================================
 \section{Introduction}
 %======================================================================
-test
+test\cite{einstein1905}
+
+\begin{table}[tbp]
+\caption{\label{tab:energy_conditions_bounce}Summary of energy conditions for the effective cosmic fluid and the scalar field at the bounce ($\tau=0$).}
+\begin{ruledtabular}
+\begin{tabular}{lcc}
+Energy condition
+  & Scalar field $T^{(\varphi)}_{\mu\nu}$
+  & Effective cosmic fluid $T^{(\mathrm{eff})}_{\mu\nu}$\\
+\hline
+NEC: $\rho + P \ge 0$
+  & \OK
+  & \NO \\
+SEC: $\rho + 3P \ge 0$
+  & \NO
+  & \NO \\
+WEC: $\rho \ge 0,\ \rho + P \ge 0$
+  & \OK
+  & \NO \\
+DEC: $\rho \ge 0,\ \rho \ge \abs{P}$
+  & \OK
+  & \NO \\
+\end{tabular}
+\end{ruledtabular}
+\end{table}
 \begin{acknowledgments}
 test
 \end{acknowledgments}
