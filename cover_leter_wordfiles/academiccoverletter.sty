@@ -1,0 +1,235 @@
+% academiccoverletter.sty
+% Shared style and structure for academic cover letters.
+% This package is intended to be used with article.cls.
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{academiccoverletter}[2026/05/21 Shared academic cover-letter template]
+
+% =========================================================
+% Layout settings: change the numerical values in this block
+% to adjust the appearance of all cover-letter templates.
+% =========================================================
+
+% Page margins.
+\newlength{\CLTopMargin}
+\newlength{\CLBottomMargin}
+\newlength{\CLLeftMargin}
+\newlength{\CLRightMargin}
+\setlength{\CLTopMargin}{35mm}
+\setlength{\CLBottomMargin}{30mm}
+\setlength{\CLLeftMargin}{30mm}
+\setlength{\CLRightMargin}{30mm}
+
+% Paragraph and vertical spacing.
+\newlength{\CLParagraphIndent}
+\newlength{\CLMetadataAfterSpace}
+\newlength{\CLGreetingAfterSpace}
+\newlength{\CLParagraphAfterSpace}
+\newlength{\CLSignatureAfterSpace}
+\setlength{\CLParagraphIndent}{16mm}
+\setlength{\CLMetadataAfterSpace}{27mm}
+\setlength{\CLGreetingAfterSpace}{7mm}
+\setlength{\CLParagraphAfterSpace}{5mm}
+\setlength{\CLSignatureAfterSpace}{5mm}
+
+% Title font size and line spacing.
+\newcommand{\CLTitleFontSize}{18pt}
+\newcommand{\CLTitleLineSkip}{22pt}
+\newcommand{\CLTitleAfterSpace}{2mm}
+
+% Font settings for LuaLaTeX/XeLaTeX. The pdfLaTeX fallback uses newtx.
+\newcommand{\CLMainFont}{Times New Roman}
+\newcommand{\CLFallbackFontA}{TeX Gyre Termes}
+\newcommand{\CLFallbackFontB}{Liberation Serif}
+
+% Line-breaking behavior.
+\newcommand{\CLEmergencyStretch}{2em}
+\newcommand{\CLHyphenPenalty}{10000}
+\newcommand{\CLExHyphenPenalty}{10000}
+
+% =========================================================
+% Required packages and global layout.
+% =========================================================
+\RequirePackage[a4paper]{geometry}
+\geometry{top=\CLTopMargin,bottom=\CLBottomMargin,left=\CLLeftMargin,right=\CLRightMargin}
+
+\RequirePackage{iftex}
+\ifPDFTeX
+  \RequirePackage[T1]{fontenc}
+  \RequirePackage[utf8]{inputenc}
+  \RequirePackage{newtxtext,newtxmath}
+\else
+  \RequirePackage{fontspec}
+  \IfFontExistsTF{\CLMainFont}
+    {\setmainfont{\CLMainFont}}
+    {\IfFontExistsTF{\CLFallbackFontA}{\setmainfont{\CLFallbackFontA}}{\setmainfont{\CLFallbackFontB}}}
+\fi
+
+\RequirePackage{etoolbox}
+\RequirePackage{microtype}
+
+\pagestyle{empty}
+\raggedbottom
+\setlength{\parindent}{\CLParagraphIndent}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{\CLEmergencyStretch}
+\hyphenpenalty=\CLHyphenPenalty
+\exhyphenpenalty=\CLExHyphenPenalty
+
+% =========================================================
+% User-editable metadata defaults.
+% Override these in cover_letter.tex with \renewcommand.
+% =========================================================
+\newcommand{\CLCoverLetterTitle}{Cover Letter}
+\newcommand{\CLSubmissionType}{New submission}
+\newcommand{\CLJournalName}{Journal Name}
+\newcommand{\CLJournalShortName}{}
+\newcommand{\CLEditorName}{}
+\newcommand{\CLEditorRole}{Editor}
+\newcommand{\CLReferenceNumber}{}
+\newcommand{\CLManuscriptTitle}{Manuscript Title}
+\newcommand{\CLArxivID}{}
+\newcommand{\CLArxivCategory}{}
+\newcommand{\CLAuthorNames}{Author Name}
+
+% New-submission body.
+\newcommand{\CLManuscriptSummary}{Manuscript summary.}
+\newcommand{\CLNewSubmissionClosingSentence}{We would like to sincerely appreciate your kind consideration.}
+
+% Revised-submission body.
+\newcommand{\CLReviewerDisplay}{the respected reviewer}
+\newcommand{\CLResponseLetterName}{a response letter to \CLReviewerDisplay}
+\newcommand{\CLChangeHighlightDescription}{blue}
+\newcommand{\CLResubmissionClosingSentence}{We would like to again sincerely appreciate your kind consideration.}
+
+% =========================================================
+% Derived metadata commands.
+% Usually these should not be edited.
+% =========================================================
+\newcommand{\CLJournalDisplay}{%
+  \CLJournalName\ifdefempty{\CLJournalShortName}{}{ (\CLJournalShortName)}%
+}
+
+\newcommand{\CLQuotedTitle}{``\CLManuscriptTitle''}
+
+\newcommand{\CLArxivText}{%
+  \ifdefempty{\CLArxivID}{}{%
+    arXiv: \CLArxivID\ifdefempty{\CLArxivCategory}{}{ [\CLArxivCategory]}%
+  }%
+}
+
+\newcommand{\CLArxivLine}{%
+  \ifdefempty{\CLArxivID}{}{\noindent \CLArxivText\par}%
+}
+
+\newcommand{\CLArxivInline}{%
+  \ifdefempty{\CLArxivID}{}{ [\CLArxivText]}%
+}
+
+\newcommand{\CLReferenceText}{%
+  \ifdefempty{\CLReferenceNumber}{}{Ref.: \CLReferenceNumber}%
+}
+
+\newcommand{\CLReferenceLine}{%
+  \ifdefempty{\CLReferenceNumber}{}{\noindent \CLReferenceText\par}%
+}
+
+\newcommand{\CLReferenceInline}{%
+  \ifdefempty{\CLReferenceNumber}{}{ [\CLReferenceText]}%
+}
+
+\newcommand{\CLTitleExtraInline}{%
+  \CLReferenceInline\CLArxivInline%
+}
+
+\newcommand{\CLEditorGreeting}{%
+  \ifdefempty{\CLEditorName}{%
+    Dear Editor(s) (\CLJournalDisplay):%
+  }{%
+    Dear \CLEditorName\ifdefempty{\CLEditorRole}{}{ (\CLEditorRole, \CLJournalName)}:%
+  }%
+}
+
+\newcommand{\CLHighlightSentence}{%
+  \ifdefempty{\CLChangeHighlightDescription}{}{%
+    We have also highlighted all these changes in \CLChangeHighlightDescription\ for the convenience of \CLReviewerDisplay.%
+  }%
+}
+
+% =========================================================
+% Structural commands.
+% =========================================================
+\newcommand{\CLBeginCoverLetter}{%
+  \raggedright
+  \setlength{\parindent}{\CLParagraphIndent}%
+}
+
+\newcommand{\CLMakeTitle}{%
+  \begin{center}
+    {\fontsize{\CLTitleFontSize}{\CLTitleLineSkip}\selectfont\bfseries \CLCoverLetterTitle}\par
+  \end{center}
+  \vspace{\CLTitleAfterSpace}%
+}
+
+\newcommand{\CLParagraphBreak}{\par\vspace{\CLParagraphAfterSpace}}
+\newcommand{\CLSpaceAfterMetadata}{\par\vspace{\CLMetadataAfterSpace}}
+\newcommand{\CLSpaceAfterGreeting}{\par\vspace{\CLGreetingAfterSpace}}
+\newcommand{\CLSpaceAfterSignatureLine}{\par\vspace{\CLSignatureAfterSpace}}
+
+\newcommand{\CLNewSubmissionMetadata}{%
+  \noindent \CLSubmissionType\ to \CLJournalDisplay\par
+  \noindent Title: \CLManuscriptTitle\par
+  \CLArxivLine
+  \noindent Authors: \CLAuthorNames\par
+}
+
+\newcommand{\CLResubmissionMetadata}{%
+  \CLReferenceLine
+  \noindent \CLSubmissionType\ to \CLJournalName\par
+  \noindent Title: \CLManuscriptTitle\par
+  \CLArxivLine
+  \noindent Authors: \CLAuthorNames\par
+}
+
+\newcommand{\CLSignatureBlock}{%
+  Yours sincerely,
+  \CLSpaceAfterSignatureLine
+  \CLAuthorNames
+}
+
+% =========================================================
+% Full letter generators.
+% In most cases, cover_letter.tex only needs to set metadata and
+% call one of these commands.
+% =========================================================
+\newcommand{\CLMakeNewSubmissionLetter}{%
+  \CLBeginCoverLetter
+  \CLMakeTitle
+  \CLNewSubmissionMetadata
+  \CLSpaceAfterMetadata
+  \noindent \CLEditorGreeting
+  \CLSpaceAfterGreeting
+  We would like to submit our manuscript entitled \CLQuotedTitle\CLArxivInline\ to \CLJournalDisplay.
+  \CLParagraphBreak
+  \CLManuscriptSummary
+  \CLParagraphBreak
+  \CLNewSubmissionClosingSentence
+  \CLParagraphBreak
+  \CLSignatureBlock
+}
+
+\newcommand{\CLMakeResubmissionLetter}{%
+  \CLBeginCoverLetter
+  \CLMakeTitle
+  \CLResubmissionMetadata
+  \CLSpaceAfterMetadata
+  \noindent \CLEditorGreeting
+  \CLSpaceAfterGreeting
+  Thank you very much for your kind consideration of our manuscript entitled \CLQuotedTitle\CLTitleExtraInline.
+  \CLParagraphBreak
+  We would like to resubmit our revised manuscript, along with \CLResponseLetterName, to \CLJournalName. We are grateful to you and \CLReviewerDisplay\ for the constructive and insightful comments, which have significantly improved the clarity, presentation, and quality of our manuscript. In the revised version, we have addressed all the points raised by \CLReviewerDisplay\ carefully and point by point. \CLHighlightSentence\ We believe that the revised manuscript addresses all concerns raised during the review process and meets the publication standards of \CLJournalName.
+  \CLParagraphBreak
+  \CLResubmissionClosingSentence
+  \CLParagraphBreak
+  \CLSignatureBlock
+}

@@ -1,0 +1,42 @@
+% cover_letter_new_submission.tex
+% New-submission cover letter using the shared academiccoverletter.sty file.
+% Compile with LuaLaTeX for the closest match to the Word template:
+%   lualatex cover_letter_new_submission.tex
+
+\documentclass[12pt,a4paper]{article}
+\usepackage{academiccoverletter}
+
+% =========================================================
+% Manuscript-specific settings.
+% Edit this block for each submission.
+% Layout and spacing are controlled in academiccoverletter.sty.
+% =========================================================
+\renewcommand{\CLSubmissionType}{New submission}
+\renewcommand{\CLJournalName}{Journal Name}
+\renewcommand{\CLJournalShortName}{Journal Short Name}
+\renewcommand{\CLEditorName}{} % Empty means ``Dear Editor(s)''.
+\renewcommand{\CLEditorRole}{Editor}
+\renewcommand{\CLManuscriptTitle}{Your manuscript title}
+\renewcommand{\CLArxivID}{xxxx.xxxxx}
+\renewcommand{\CLArxivCategory}{astro-ph.CO}
+\renewcommand{\CLAuthorNames}{Author Names}
+
+\renewcommand{\CLManuscriptSummary}{%
+In this paper, we propose a novel artificial neural network (ANN)-based framework
+for the non-parametric reconstruction of the late-time cosmic expansion. The
+framework is trained and validated through a three-stage screening pipeline prior
+to its application to real observational data. As a demonstration of its
+effectiveness, we reconstruct the Hubble parameter using the latest cosmic
+chronometer measurements. Our results show that the reconstructed expansion
+history aligns with the predictions of the \ensuremath{\Lambda}CDM model within
+observational uncertainties, thereby supporting the robustness and reliability
+of the proposed approach.%
+}
+
+\renewcommand{\CLNewSubmissionClosingSentence}{%
+We would like to sincerely appreciate your kind consideration.%
+}
+
+\begin{document}
+\CLMakeNewSubmissionLetter
+\end{document}

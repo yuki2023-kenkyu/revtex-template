@@ -4,7 +4,129 @@ REVTeX 4.2 を用いて英語の学術論文原稿を作成し、arXiv 投稿、
 
 このテンプレートは、本文原稿を `main.tex`、参考文献を `refs.bib`、査読回答書を `report.tex` として管理することを想定しています。ビルドは `latexmk` と `.latexmkrc` に集約し、VS Code + LaTeX Workshop でも同じ設定を使えるようにしています。差分原稿の作成には `makefile` の `diff` ターゲットを使います。
 
-## 1. ファイル構成
+## 1. REVTeXのインストール
+
+このテンプレートは `revtex4-2` クラスを使うため、REVTeX 4.2 を含むLaTeX環境が必要です。通常はREVTeX単体を手作業で配置するのではなく、TeX Live、MacTeX、またはMiKTeXのパッケージ管理機能で導入します。
+
+インストール後にREVTeXが使えるかどうかは、次のコマンドで確認できます。
+
+```bash
+kpsewhich revtex4-2.cls
+```
+
+`revtex4-2.cls` のパスが表示されれば、REVTeX 4.2 は利用可能です。何も表示されない場合は、REVTeXパッケージが未導入、またはTeX環境のPATH設定に問題があります。
+
+### 1.1 macOSの場合
+
+macOSでは、MacTeXを使う方法を推奨します。MacTeXはTeX LiveをmacOS向けにまとめた配布版で、標準的なLaTeXパッケージ、BibTeX、`latexmk` などを一括して導入できます。
+
+基本手順は以下です。
+
+1. MacTeXをインストールする。
+   - 公式サイト: https://tug.org/mactex/
+   - 容量を抑えたい場合はBasicTeXも選択できますが、その場合は不足パッケージを追加で入れる必要があります。
+2. ターミナルを開き、TeX環境が認識されているか確認する。
+
+```bash
+pdflatex --version
+bibtex --version
+latexmk --version
+```
+
+3. TeX Live Managerを更新する。
+
+```bash
+sudo tlmgr update --self --all
+```
+
+4. REVTeXや差分作成用ツールが不足している場合は、次を実行する。
+
+```bash
+sudo tlmgr install revtex latexmk latexdiff
+```
+
+5. REVTeXが見つかるか確認する。
+
+```bash
+kpsewhich revtex4-2.cls
+```
+
+このテンプレートでは `pdflatex` を標準にしているため、`latexmk main.tex` が通れば基本的な執筆環境は整っています。VS Codeを使う場合は、追加で LaTeX Workshop 拡張機能を導入してください。
+
+### 1.2 Windowsの場合
+
+Windowsでは、TeX Liveを使う方法とMiKTeXを使う方法があります。arXivやLinux環境での再現性を重視する場合はTeX Live、最小構成から始めたい場合はMiKTeXが扱いやすいです。
+
+#### TeX Liveを使う場合
+
+1. TeX Liveをインストールする。
+   - 公式サイト: https://tug.org/texlive/
+   - インストール時にPATHへ追加する設定を有効にします。
+2. PowerShellまたはコマンドプロンプトで、TeX環境が認識されているか確認する。
+
+```powershell
+pdflatex --version
+bibtex --version
+latexmk --version
+```
+
+3. 必要に応じてTeX Live Managerを更新し、REVTeXと差分作成用ツールを導入する。
+
+```powershell
+tlmgr update --self --all
+tlmgr install revtex latexmk latexdiff
+```
+
+管理者権限でインストールしたTeX Liveでは、PowerShellを管理者として開く必要がある場合があります。
+
+4. REVTeXが見つかるか確認する。
+
+```powershell
+kpsewhich revtex4-2.cls
+```
+
+#### MiKTeXを使う場合
+
+1. MiKTeXをインストールする。
+   - 公式サイト: https://miktex.org/
+2. MiKTeX Consoleを開き、`Updates` からパッケージを更新する。
+3. `Settings` で不足パッケージの自動インストールを有効にする。
+4. PowerShellまたはコマンドプロンプトで確認する。
+
+```powershell
+pdflatex --version
+bibtex --version
+latexmk --version
+kpsewhich revtex4-2.cls
+```
+
+MiKTeXでは、初回コンパイル時に `revtex`、`latexmk`、`latexdiff` などの不足パッケージのインストールを求められることがあります。その場合は許可してください。自動インストールがうまくいかない場合は、MiKTeX Console の `Packages` から `revtex`、`latexmk`、`latexdiff` を検索して手動で導入します。
+
+### 1.3 WindowsでMakefile差分作成を使う場合
+
+このテンプレートの `makefile` は、Windowsでは `mingw32-make` から使うことを想定しています。本文PDFの作成だけなら `mingw32-make` は不要ですが、次のような差分PDF作成コマンドを使う場合には必要です。
+
+```powershell
+mingw32-make diff OLD=old_ver_filename.tex NEW=new_ver_filename.tex
+```
+
+`mingw32-make` がない場合は、TDM-GCC、MinGW、MSYS2などを導入し、`mingw32-make --version` がPowerShellまたはコマンドプロンプトで通るようにPATHを設定してください。
+
+確認用コマンドは次です。
+
+```powershell
+latexdiff --version
+mingw32-make --version
+```
+
+`mingw32-make` を使わない場合でも、次のように `latexdiff` を直接実行することで差分texを作成できます。
+
+```powershell
+latexdiff old_ver_filename.tex new_ver_filename.tex > diff.tex
+latexmk diff.tex
+```
+
+## 2. ファイル構成
 
 ```text
 revtex-template-main/
@@ -21,7 +143,7 @@ revtex-template-main/
 
 通常の執筆では、主に `main.tex` と `refs.bib` を編集します。査読対応時には `report.tex` を編集し、必要に応じて `latexdiff` で旧版と新版の差分PDFを作成します。
 
-## 2. 事前に必要な環境
+## 3. 事前に必要な環境
 
 以下が導入されていることを想定しています。
 
@@ -44,7 +166,7 @@ mingw32-make --version
 
 `command not found` や「認識されません」と表示される場合は、インストール不足またはPATH設定の問題です。
 
-## 3. 論文本文の執筆方法
+## 4. 論文本文の執筆方法
 
 ### 3.1 基本方針
 
@@ -171,7 +293,7 @@ This method is based on previous work~\cite{einstein1905}.
 
 投稿前には、本文中で引用した文献がすべて `refs.bib` に含まれていること、未引用の不要な文献が混ざっていないこと、DOI・arXiv番号・著者名・出版年が正しいことを確認してください。
 
-## 4. ビルド方法
+## 5. ビルド方法
 
 ### 4.1 VS Codeでのビルド
 
@@ -211,7 +333,7 @@ PDFも含めて完全に削除する場合は次を実行します。
 latexmk -C main.tex
 ```
 
-## 5. 図ファイル形式の注意
+## 6. 図ファイル形式の注意
 
 このテンプレートの `.latexmkrc` は `pdflatex` を使います。そのため、図は原則として `pdf`、`png`、`jpg` を推奨します。
 
@@ -222,7 +344,7 @@ EPS図を使う場合は、以下のどちらかに統一してください。
 
 `pdflatex` 用の原稿にEPS、LaTeX処理用の原稿にPNG/PDFを混在させると、ローカル環境では通っても投稿システムで失敗する場合があります。投稿前に、投稿先のシステムで選ぶTeX engineと図形式を必ず整合させてください。
 
-## 6. arXiv投稿用の準備
+## 7. arXiv投稿用の準備
 
 ### 6.1 投稿前チェック
 
@@ -312,7 +434,7 @@ Revised version. Added discussion of recent observational constraints, clarified
 
 大幅改訂の場合は、本文のどこが変わったかをローカルで把握するために、後述の `latexdiff` による差分PDFを作成して確認することを推奨します。
 
-## 7. ジャーナル投稿用の準備
+## 8. ジャーナル投稿用の準備
 
 ### 7.1 投稿前チェック
 
@@ -343,34 +465,34 @@ supplement.pdf          # 補足資料がある場合
 
 ジャーナルによっては、Cover letter や Response to Referee を本文ソースのzipに含めると編集者に見えない場合があります。投稿システム上の専用欄または attachment として提出してください。
 
-## 8. Cover letter の下書き
+## 9. Cover letter の下書き
 
 Cover letter は、論文の主張を売り込み過ぎず、投稿先との適合性、新規性、独立性、倫理的確認事項を簡潔に伝える文書です。長くても1ページ程度を目安にします。
 
 以下は初回投稿用の例です。
 
 ```text
-Dear Editor(s),
 
-Please find enclosed our manuscript entitled
-"[Manuscript Title]", which we would like to submit for consideration
-for publication in [Journal Name].
+New submission to [Journal Name]
+Title: "[Manuscript Title]"
+arXiv:[xxxx.xxxxx] [astro-ph.CO]※[gr-gc],[hep-th]などもあり
+Authors: [Authors Name]
 
-In this work, we [briefly state the main purpose and result of the paper in one or two sentences].
-We believe that the manuscript is suitable for [Journal Name] because
-[briefly explain the relevance to the journal's scope and readership].
 
-This manuscript is original, has not been published previously, and is not under consideration
-for publication elsewhere. All authors have approved the submission of the manuscript.
-[Add statements on conflicts of interest, funding, data availability, or ethics if required by the journal.]
+     
+We would like to sincerely appreciate your kind considerations and warm support very much.
 
-Thank you for considering our manuscript. We look forward to hearing from you.
+Dear Editor(s) (Journal Name):
+
+We would like to submit our manuscript entitled
+``[Manuscript Title]'' arXiv:[xxxx.xxxxx] [astro-ph.CO] to [Journal Name].
+
+In this paper, we [Abstract].
+
+We would like to sincerely appreciate your kind considerations and warm support very much.
 
 Yours sincerely,
-[Corresponding Author Name]
-on behalf of all authors
-[Affiliation]
-[Email]
+[Authors Name]
 ```
 
 投稿済みarXiv原稿がある場合は、必要に応じて次の一文を追加します。
@@ -379,15 +501,8 @@ on behalf of all authors
 A preprint version of this manuscript is available at arXiv:[xxxx.xxxxx].
 ```
 
-審査を急いでほしい事情がある場合は、強い要求ではなく、編集判断を尊重する形で簡潔に書きます。
 
-```text
-If possible, we would be grateful if the review process could proceed at your earliest convenience,
-as the corresponding author is working under a degree-related timeline. We fully understand,
-however, that the editorial and referee process must follow the journal's standard procedures.
-```
-
-## 9. 査読者レポートへの回答作成
+## 10. 査読者レポートへの回答作成
 
 ### 9.1 基本方針
 
@@ -464,31 +579,29 @@ on behalf of all authors
 ### 9.4 改訂時のCover letter例
 
 ```text
-Dear Editor(s),
+Ref.: [Manuscript Number]
+Re-submission to [Journal Name]
+Title: [Manuscript Title]
+Authors: [Authors Name]
 
-Thank you for giving us the opportunity to revise our manuscript entitled
-"[Manuscript Title]" ([Manuscript ID]).
 
-We have carefully considered all comments from the referee(s) and revised the manuscript accordingly.
-The main changes are as follows:
 
-1. [Major change 1]
-2. [Major change 2]
-3. [Major change 3]
+Dear Professor [Editor Name] (Editor, [Journal Name]): 
 
-A detailed point-by-point response is provided in the response letter.
-We have also prepared a version of the manuscript with changes highlighted, if useful for the review process.
+       Thank you very much for your kind considerations on our manuscript entitled “[Manuscript Title]” [Ref.: [Manuscript Number]].
+We would like to resubmit our revised manuscript, along with a response letter to the respected reviewer, to [Journal Name]. We are grateful to you and the respected reviewer for the constructive and insightful comments, which have significantly improved the clarity, presentation, and quality of our manuscript. In our revised version, we have tried to address all the points raised by the respected reviewer one by one very carefully as far as we can. We have also highlighted all these changes in blue for the convenience of the respected reviewer. We believe this revised manuscript addressed all concerns raised during the review process and met the publication standards of [Journal Name]. 
 
-Thank you again for your consideration.
+We would like to again sincerely appreciate your kind considerations and warm supports very much. 
 
 Yours sincerely,
-[Corresponding Author Name]
-on behalf of all authors
+
+[Author Names]
+
 ```
 
 JCAP等、一部ジャーナルでは改訂時のCover letterまたは査読回答の入力が必須であり、本文ソースアーカイブに含めても編集者に見えない場合があります。その場合は、投稿フォームのテキスト欄または attachment として提出します。
 
-## 10. `makefile` による差分PDF作成
+## 11. `makefile` による差分PDF作成
 
 ### 10.1 目的
 
@@ -586,7 +699,7 @@ MinGW / TDM-GCC がインストールされていない、またはPATHが通っ
 mingw32-make diff OLD=old.tex NEW=new.tex LATEXDIFF_OPTS="--flatten --type=CFONT"
 ```
 
-## 11. 推奨する執筆・投稿ワークフロー
+## 12. 推奨する執筆・投稿ワークフロー
 
 ### 11.1 初稿作成
 
@@ -647,7 +760,7 @@ mingw32-make diff OLD=main_v2.tex NEW=main_v3.tex DIFF=diff_v2_v3
 6. `report.tex` で点ごとの回答書を作成する。
 7. 改訂版本文PDF、差分PDF、回答書、Cover letterを提出する。
 
-## 12. 投稿前チェックリスト
+## 13. 投稿前チェックリスト
 
 ### 本文
 
@@ -682,7 +795,7 @@ mingw32-make diff OLD=main_v2.tex NEW=main_v3.tex DIFF=diff_v2_v3
 - [ ] 差分PDFを作成した。
 - [ ] Cover letter と response letter を本文アーカイブではなく適切な提出欄に入れた。
 
-## 13. 運用上の注意
+## 14. 運用上の注意
 
 - このテンプレートは汎用的なREVTeXテンプレートです。最終的には投稿先ジャーナルの最新指示を優先してください。
 - arXivやジャーナルの投稿システムは更新されるため、投稿直前に公式ページを確認してください。
@@ -690,9 +803,13 @@ mingw32-make diff OLD=main_v2.tex NEW=main_v3.tex DIFF=diff_v2_v3
 - Windowsでは大文字小文字の違いが見逃されやすいですが、投稿システムでは区別される場合があります。
 - 差分PDFは査読者の確認を助けるための資料であり、本文PDF・回答書の代替ではありません。
 
-## 14. 参考リンク
+## 15. 参考リンク
 
 - REVTeX 4.2: https://journals.aps.org/revtex
+- MacTeX: https://tug.org/mactex/
+- TeX Live: https://tug.org/texlive/
+- MiKTeX: https://miktex.org/
+- CTAN revtex package: https://ctan.org/pkg/revtex
 - arXiv Submission Guidelines: https://info.arxiv.org/help/submit/index.html
 - arXiv Submit TeX/LaTeX: https://info.arxiv.org/help/submit_tex.html
 - arXiv TeX Live information: https://info.arxiv.org/help/faq/texlive.html

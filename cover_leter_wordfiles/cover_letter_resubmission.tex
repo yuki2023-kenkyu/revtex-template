@@ -1,0 +1,34 @@
+% cover_letter_resubmission.tex
+% Revised-manuscript / referee-response cover letter using academiccoverletter.sty.
+% Compile with LuaLaTeX for the closest match to the Word template:
+%   lualatex cover_letter_resubmission.tex
+
+\documentclass[12pt,a4paper]{article}
+\usepackage{academiccoverletter}
+
+% =========================================================
+% Manuscript-specific settings.
+% Edit this block for each resubmission.
+% Layout and spacing are controlled in academiccoverletter.sty.
+% =========================================================
+\renewcommand{\CLReferenceNumber}{Manuscript Number}
+\renewcommand{\CLSubmissionType}{Re-submission}
+\renewcommand{\CLJournalName}{Journal Name}
+\renewcommand{\CLJournalShortName}{Journal Short Name}
+\renewcommand{\CLEditorName}{Professor [Editor Name]}
+\renewcommand{\CLEditorRole}{Editor}
+\renewcommand{\CLManuscriptTitle}{Your manuscript title}
+\renewcommand{\CLArxivID}{}
+\renewcommand{\CLArxivCategory}{}
+\renewcommand{\CLAuthorNames}{Author Names}
+
+\renewcommand{\CLReviewerDisplay}{the respected reviewer}
+\renewcommand{\CLResponseLetterName}{a response letter to \CLReviewerDisplay}
+\renewcommand{\CLChangeHighlightDescription}{blue} % Empty means the highlight sentence is omitted.
+\renewcommand{\CLResubmissionClosingSentence}{%
+We would like to again sincerely appreciate your kind consideration.%
+}
+
+\begin{document}
+\CLMakeResubmissionLetter
+\end{document}
