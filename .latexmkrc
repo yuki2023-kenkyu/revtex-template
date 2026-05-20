@@ -16,12 +16,12 @@ $max_repeat = 5;
 
 # BibTeX運用で .bbl を「再生成可能」とみなして -c/-C の削除対象に含める
 # （テンプレ repo で .bib を同梱する前提なら、この設定が実務的に便利）
-$bibtex_use = 2;  # .bbl を clean で消す :contentReference[oaicite:2]{index=2}
+# $bibtex_use = 2;  # .bbl を clean で消す :contentReference[oaicite:2]{index=2}
 
 # -c / -C 実行時に追加で消したい拡張子（スペース区切り）
 # latexmk の既定でも多くは消えますが、環境/パッケージで残りがちなものを明示追加します。
 $clean_ext .= ' '
-  . 'bbl blg '              # 参考文献（上の $bibtex_use=2 とセットで効く）
+  . 'blg '              # 参考文献（上の $bibtex_use=2 とセットで効く）
   . 'run.xml bcf '          # biber/biblatex系（混入しても掃除できる）
   . 'fdb_latexmk fls '       # latexmk/recorder
   . 'synctex.gz '            # SyncTeX
