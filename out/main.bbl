@@ -49,7 +49,7 @@
 \providecommand \BibitemShut  [1]{\csname bibitem#1\endcsname}%
 \let\auto@bib@innerbib\@empty
 %</preamble>
-\bibitem [{\citenamefont {Einstein}(1905)}]{einstein1905}%
+\bibitem [{\citenamefont {Hashimoto}\ \emph {et~al.}(2026)\citenamefont {Hashimoto}, \citenamefont {Bamba},\ and\ \citenamefont {Mandal}}]{Hashimoto:2026cah}%
   \BibitemOpen
-  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {A.}~\bibnamefont {Einstein}},\ }\href@noop {} {\bibfield  {journal} {\bibinfo  {journal} {Annalen der Physik}\ } (\bibinfo {year} {1905})}\BibitemShut {NoStop}%
+  \bibfield  {author} {\bibinfo {author} {\bibfnamefont {Y.}~\bibnamefont {Hashimoto}}, \bibinfo {author} {\bibfnamefont {K.}~\bibnamefont {Bamba}},\ and\ \bibinfo {author} {\bibfnamefont {S.}~\bibnamefont {Mandal}},\ }\Eprint {https://arxiv.org/abs/2603.23564} {arXiv:2603.23564 [gr-qc]}  (\bibinfo {year} {2026})\BibitemShut {NoStop}%
 \end{thebibliography}%
